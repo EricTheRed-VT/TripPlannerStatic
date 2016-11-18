@@ -1,4 +1,3 @@
-app.js
 'use strict';
 const express = require('express');
 const nunjucks = require('nunjucks');
@@ -32,3 +31,20 @@ db.sync()
   });
 })
 .catch(console.error);
+
+
+//Error Handling
+
+// catch 404 (i.e., no route was hit) and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// handle all errors (anything passed into `next()`)
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  console.error(err);
+  res.render('errorpage', {err: err});
+});
