@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const db = require('./db').db;
+const db = require('./models');
 const routes = require('./routes');
 
 const app = express();
@@ -13,25 +13,18 @@ const app = express();
 // templating boilerplate setup
 app.engine('html', nunjucks.render); // how to render html templates
 app.set('view engine', 'html'); // what file extension do our templates have
-nunjucks.configure('views', { noCache: true }); // where to find the views, caching off
+nunjucks.configure('views', { noCache: true, express: app }); // where to find the views, caching off
 
 app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(routes);
-
-app.use(express.static(path.join(__dirname, '../public')));
-
-db.sync()
-.then(function () {
-  app.listen(3000, function () {
-    console.log('Listening on port 3000');
-  });
-})
-.catch(console.error);
-
 
 //Error Handling
 
@@ -48,3 +41,11 @@ app.use(function(err, req, res, next) {
   console.error(err);
   res.render('errorpage', {err: err});
 });
+
+db.sync()
+.then(function () {
+  app.listen(3000, function () {
+    console.log('Listening on port 3000');
+  });
+})
+.catch(console.error);

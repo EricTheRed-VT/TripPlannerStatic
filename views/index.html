@@ -1,0 +1,21 @@
+{% extends "layout.html" %} {% block content %}
+<div id="app" class="clearfix">
+    <h3>Mission Control</h3>
+    <hr>
+    <ul class="list-unstyled">
+        {% for restaurant in restaurants %}
+        <li>{{restaurant.name}}</li>
+        {% endfor %}
+    </ul>
+    <ul class="list-unstyled">
+        {% for hotel in hotels %}
+        <li>{{hotel.name}}</li>
+        {% endfor %}
+    </ul>
+    <ul class="list-unstyled">
+        {% for activity in activities %}
+        <li>{{activity.name}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
